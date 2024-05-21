@@ -1,0 +1,48 @@
+CREATE DATABASE unet;
+
+
+CREATE TABLE User (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(50) NOT NULL,
+    Password VARCHAR(50) NOT NULL,
+    Role VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Patient (
+    PatientID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL,
+    Age INT NOT NULL,
+    Gender VARCHAR(10) NOT NULL,
+    ContactInfo VARCHAR(100),
+    MedicalHistory TEXT
+);
+
+CREATE TABLE Image (
+    ImageID INT AUTO_INCREMENT PRIMARY KEY,
+    PatientID INT,
+    UploadTime DATETIME NOT NULL,
+    ImagePath VARCHAR(255) NOT NULL,
+    Description TEXT,
+    FOREIGN KEY (PatientID) REFERENCES Patient(PatientID)
+);
+
+CREATE TABLE SegmentationResult (
+    ResultID INT AUTO_INCREMENT PRIMARY KEY,
+    ImageID INT,
+    SegmentationTime DATETIME NOT NULL,
+    ResultPath VARCHAR(255) NOT NULL,
+    Parameters TEXT,
+    DiceCoefficient FLOAT,
+    IoU FLOAT,
+    FOREIGN KEY (ImageID) REFERENCES Image(ImageID)
+);
+
+CREATE TABLE SystemLog (
+    LogID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT,
+    Action VARCHAR(255) NOT NULL,
+    Timestamp DATETIME NOT NULL,
+    Status VARCHAR(50),
+    ErrorMessage TEXT,
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
+);
